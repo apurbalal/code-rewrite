@@ -5,7 +5,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   experimental: { esmExternals: true },
   reactStrictMode: true,
-  assetPrefix: isProd ? '/browser-code' : undefined,
+  assetPrefix: isProd ? '/code-rewrite' : undefined,
 }
 
 module.exports = removeImports(nextConfig);
