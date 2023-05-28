@@ -13,14 +13,14 @@ export const handleWithProps = (eachArgument: any) => {
       ]
     );
 
-    const useMemoHook = types.variableDeclaration("const", [
+    const blockStatement = types.variableDeclaration("const", [
       types.variableDeclarator(
         types.identifier("properties"),
         createCallback
       ),
     ]);
 
-    return { blockStatement: useMemoHook, returnProperty: ["properties"] };
+    return { blockStatement, returnProperty: ["properties"] };
   } else {
     const createCallback = types.callExpression(
       types.identifier("useMemo"),
@@ -36,7 +36,7 @@ export const handleWithProps = (eachArgument: any) => {
     );
 
     const returnProperties: string[] = [];
-    const useMemoHook = types.variableDeclaration("const", [
+    const blockStatement = types.variableDeclaration("const", [
       types.variableDeclarator(
         types.objectPattern(
           eachArgument.arguments[0].properties.map((property: types.ObjectTypeProperty) => {
@@ -59,6 +59,6 @@ export const handleWithProps = (eachArgument: any) => {
       ),
     ]);
     
-    return { blockStatement: useMemoHook, returnProperty: returnProperties };
+    return { blockStatement, returnProperty: returnProperties };
   }
 }
