@@ -7,6 +7,7 @@ import { print } from "recast";
 import { handleWithProps } from "./helpers/handleWithProps";
 import { handleCustomEnhance } from "./helpers/handleCustomEnhance";
 import { handleWithGraphql } from "./helpers/handleWithGraphql";
+import { handleLifecycle } from "./helpers/handleLifecycle";
 
 export const generateReWrittenCode = (code: string) => {
   const ast = parse(code, {
@@ -22,20 +23,20 @@ export const generateReWrittenCode = (code: string) => {
         path.node?.callee?.name === "compose"
       ) {
         // replace all child with hooks
-        const parentName = path.parent.id.name;
+        const parentName = path.parent.id.name.slice(0,4) === "with" ? path.parent.id.name.slice(4) : path.parent.id.name;
         const parentNameHook = `use${parentName
           .charAt(0)
           .toUpperCase()}${parentName.slice(1)}`;
 
         path.parent.id.name = parentNameHook;
 
-        const blockStatements: (types.BlockStatement | types.VariableDeclaration)[] = [];
+        const blockStatements: (types.BlockStatement | types.VariableDeclaration | types.Statement)[] = [];
         const returnProperties: string[] = [];
 
         path.node.arguments.forEach((eachArgument: any) => {
           if (eachArgument.type === "Identifier") {
             if (eachArgument.name.slice(0, 4) === "with") {
-              const { blockStatement, returnProperty } = handleCustomEnhance(eachArgument.name);
+              const { blockStatement, returnProperty } = handleCustomEnhance(eachArgument.name.slice(4));
               blockStatements.push(blockStatement);
               returnProperties.push(returnProperty);
             }
@@ -61,6 +62,9 @@ export const generateReWrittenCode = (code: string) => {
               const { blockStatement, returnProperty } = handleWithProps(eachArgument);
               blockStatements.push(blockStatement);
               returnProperties.push(...returnProperty);
+            } else if (eachArgument.callee.name === "lifecycle") {
+              const { blockStatement } = handleLifecycle(eachArgument);
+              blockStatements.push(...blockStatement);
             }
           }
         });

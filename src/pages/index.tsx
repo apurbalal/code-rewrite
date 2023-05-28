@@ -3,11 +3,10 @@ import { Editor } from "@/component/Editor";
 import { generateReWrittenCode } from "@/parser/rewriteCode";
 import { useDebounce } from "usehooks-ts";
 import { JSONTree } from "react-json-tree";
+import { testCode } from "@/constant/testFile";
 
 function HomePage() {
-  const [code, setCode] = React.useState(
-    `function add(a, b) {\n  return a + b;\n}`
-  );
+  const [code, setCode] = React.useState(testCode);
   const debouncedValue = useDebounce<string>(code, 500);
   const [result, setResult] = React.useState("");
   const [ast, setAst] = React.useState<any>(null);
@@ -29,7 +28,7 @@ function HomePage() {
   return (
     <div className="flex col vh100 vw100">
       <div className="divider" />
-      <div className="flex row" style={{ margin: 16 }}>
+      <div className="flex row" style={{ margin: 8 }}>
         <p className="flex-1">Original code</p>
         <p className="flex-1">Re-written code</p>
       </div>
@@ -53,7 +52,7 @@ function HomePage() {
           >
             <div
               style={{
-                padding: 16,
+                padding: 8,
                 marginLeft: -16,
                 marginRight: -14,
                 position: "sticky",

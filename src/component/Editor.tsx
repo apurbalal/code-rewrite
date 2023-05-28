@@ -20,7 +20,7 @@ export const Editor = ({
     theme="vs-dark"
     defaultValue={defaultValue}
     options={{
-      fontSize: 16,
+      fontSize: 14,
       minimap: { enabled: false },
       readOnly,
     }}
