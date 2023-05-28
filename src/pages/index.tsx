@@ -29,8 +29,8 @@ function HomePage() {
     <div className="flex col vh100 vw100">
       <div className="divider" />
       <div className="flex row" style={{ margin: 8 }}>
-        <p className="flex-1">Original code</p>
-        <p className="flex-1">Re-written code</p>
+        <p className="flex-1">Recompose code</p>
+        <p className="flex-1">Hooks code</p>
       </div>
       <div className="divider" />
       <div className="flex row flex-1" style={{ flexGrow: 1 }}>
