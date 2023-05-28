@@ -3,10 +3,10 @@ import { Editor } from "@/component/Editor";
 import { generateReWrittenCode } from "@/parser/rewriteCode";
 import { useDebounce } from "usehooks-ts";
 import { JSONTree } from "react-json-tree";
-import { testCode1, testCode2 } from "@/constant/testFile";
+import { testCode } from "@/constant/testFile";
 
 function HomePage() {
-  const [code, setCode] = React.useState(testCode2);
+  const [code, setCode] = React.useState(testCode);
   const debouncedValue = useDebounce<string>(code, 500);
   const [result, setResult] = React.useState("");
   const [ast, setAst] = React.useState<any>(null);

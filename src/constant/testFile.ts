@@ -1,4 +1,4 @@
-export const testCode1 = `const enhance = compose(
+export const testCode = `const enhance = compose(
   withState('value', 'updateValue', ''),
   withProps({ 'loadingDataFromApi': true, 'posts': [] }),
   withHandlers({
@@ -23,9 +23,10 @@ export const testCode1 = `const enhance = compose(
       console.log("componentDidUpdate")
     },
   }),
-)`;
+);
 
-export const testCode2 = `const EnhancedComponent = compose(
+
+const EnhancedComponent = compose(
   withState('value', 'updateValue', ''),
   withProps({ 'loadingDataFromApi': true, 'posts': [] }),
   withHandlers({
@@ -50,5 +51,5 @@ export const testCode2 = `const EnhancedComponent = compose(
       console.log("componentDidUpdate")
     },
   }),
-)(Component);
+)(Component)
 `;
