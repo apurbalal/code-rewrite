@@ -5,7 +5,7 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
   
-  --primary-color: #EC407A;
+  --primary-color: #00B4FF;
   --secondary-color: #C6FF00;
 
   --divider-color: rgba(255,255,255, 0.13);
@@ -28,6 +28,10 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-size: 14px;
+}
+
+a {
+  color: var(--primary-color);
 }
 
 .divider {

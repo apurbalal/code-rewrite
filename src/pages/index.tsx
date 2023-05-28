@@ -30,7 +30,12 @@ function HomePage() {
       <div className="divider" />
       <div className="flex row" style={{ margin: 8 }}>
         <p className="flex-1">Recompose code</p>
-        <p className="flex-1">Hooks code</p>
+        <div className="flex flex-1" style={{ paddingLeft: 136 }}>
+          <p className="flex-1">Hooks code(Generated)</p>
+          <a href="https://github.com/apurbalal/code-rewrite">
+            Repository link
+          </a>
+        </div>
       </div>
       <div className="divider" />
       <div className="flex row flex-1" style={{ flexGrow: 1 }}>
