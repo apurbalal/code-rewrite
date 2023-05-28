@@ -1,11 +1,12 @@
-import { createUseCallback } from "./helpers/createUseCallback";
-import { createUseMutation } from "./helpers/createUseMutation";
-import { createUseQuery } from "./helpers/createUseQuery";
+import { handleWithHandlers } from "./helpers/handleWithHandlers";
 import * as types from "@babel/types";
 import { parse } from "@babel/parser";
-import { createUseState } from "./helpers/createUseState";
+import { handleWithState } from "./helpers/handleWithState";
 import traverse from "@babel/traverse";
 import { print } from "recast";
+import { handleWithProps } from "./helpers/handleWithProps";
+import { handleCustomEnhance } from "./helpers/handleCustomEnhance";
+import { handleWithGraphql } from "./helpers/handleWithGraphql";
 
 export const generateReWrittenCode = (code: string) => {
   try {
@@ -32,36 +33,33 @@ export const generateReWrittenCode = (code: string) => {
           const returnProperties: string[] = [];
 
           path.node.arguments.forEach((eachArgument: any) => {
-            if (eachArgument.callee.name === "withHandlers") {
-              eachArgument.arguments[0].properties.map(
-                (eachProperty: any) => {
-                  const { blockStatement, returnProperty } = createUseCallback(eachProperty);
-                  blockStatements.push(blockStatement);
-                  returnProperties.push(returnProperty);
-                }
-              );
-            }
-
-            if (eachArgument.callee.name === "withState") {
-              const { blockStatement, returnProperty } = createUseState(eachArgument);
-              blockStatements.push(blockStatement);
-              returnProperties.push(...returnProperty);
-            }
-
-            if (eachArgument.callee.name === "withGraphql") {
-              const isMutationOperation =
-                eachArgument.arguments[1].properties.find(
-                  (eachProperty: any) => {
-                    return eachProperty.key.name === "name";
-                  }
-                );
-              if (isMutationOperation) {
-                const { blockStatement, returnProperty } = createUseMutation(eachArgument);
+            if (eachArgument.type === "Identifier") {
+              if (eachArgument.name.slice(0, 4) === "with") {
+                const { blockStatement, returnProperty } = handleCustomEnhance(eachArgument.name);
                 blockStatements.push(blockStatement);
                 returnProperties.push(returnProperty);
-              } else {
-                const { bloackStatement, returnProperty }= createUseQuery(eachArgument);
-                blockStatements.push(bloackStatement);
+              }
+            }
+            if (eachArgument.type === "CallExpression") {
+              if (eachArgument.callee.name === "withHandlers") {
+                eachArgument.arguments[0].properties.map(
+                  (eachProperty: any) => {
+                    const { blockStatement, returnProperty } = handleWithHandlers(eachProperty);
+                    blockStatements.push(blockStatement);
+                    returnProperties.push(returnProperty);
+                  }
+                );
+              } else if (eachArgument.callee.name === "withState") {
+                const { blockStatement, returnProperty } = handleWithState(eachArgument);
+                blockStatements.push(blockStatement);
+                returnProperties.push(...returnProperty);
+              } else if (eachArgument.callee.name === "withGraphql") {
+                const { blockStatement, returnProperty } = handleWithGraphql(eachArgument);
+                blockStatements.push(blockStatement);
+                returnProperties.push(...returnProperty);
+              } else if (eachArgument.callee.name === "withProps" || eachArgument.callee.name === "mapProps") {
+                const { blockStatement, returnProperty } = handleWithProps(eachArgument);
+                blockStatements.push(blockStatement);
                 returnProperties.push(...returnProperty);
               }
             }

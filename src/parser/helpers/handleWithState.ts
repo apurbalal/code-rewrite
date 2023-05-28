@@ -1,6 +1,6 @@
 import * as types from "@babel/types";
 
-export const createUseState = (eachArgument: any) => {
+export const handleWithState = (eachArgument: any) => {
   // replace with useState
   const stateName: string = eachArgument.arguments[0].value;
   const stateUpdate: string = eachArgument.arguments[1].value;

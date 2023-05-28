@@ -12,10 +12,12 @@ function HomePage() {
 
   useEffect(() => {
     try {
+      console.clear();
       const resp = generateReWrittenCode(debouncedValue);
       setResult(resp?.code ?? "");
     } catch (error) {
       console.error(error);
+      setResult("");
     }
   }, [debouncedValue]);
 

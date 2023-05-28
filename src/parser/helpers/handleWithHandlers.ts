@@ -1,6 +1,6 @@
 import * as types from "@babel/types";
 
-export const createUseCallback = (eachProperty: any) => {
+export const handleWithHandlers = (eachProperty: any) => {
   // Key Identifier Value Arrow function
   const methodName: string = eachProperty.key.name;
   const methodBody = eachProperty.value;

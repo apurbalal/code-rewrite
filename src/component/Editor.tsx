@@ -16,7 +16,7 @@ export const Editor = ({
   <MonacoEditor
     width="100%"
     height={"100%"}
-    defaultLanguage="javascript"
+    defaultLanguage="typescript"
     theme="vs-dark"
     defaultValue={defaultValue}
     options={{
