@@ -1,6 +1,6 @@
 # Code rewrite
 - Link: https://apurbalal.github.io/code-rewrite/
-- This tool helps you to refactor your code on the browser. Currently it only supports recompose -> hook migration.
+- This tool helps you to refactor your code in the browser. Currently it only supports recompose -> hook migration.
 
 ## What it does?
 - Helps to refactor recompose code to hooks.
