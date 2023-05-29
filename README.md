@@ -4,7 +4,7 @@
 
 ## What it does?
 - Helps to refactor recompose code to hooks.
-- The output won't work out of the box and will require teweaks.
+- The output won't work out of the box and will require tweaks.
 - Visit the link to see it in action.
 <img width="1788" alt="Screenshot 2023-05-28 at 21 10 38" src="https://github.com/apurbalal/code-rewrite/assets/9425881/1f9f7e42-5315-4cef-aa39-b38d753a21ae">
 
