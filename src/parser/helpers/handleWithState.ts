@@ -17,5 +17,5 @@ export const handleWithState = (eachArgument: any) => {
     ),
   ]);
 
-  return { blockStatement: stateHook, returnProperty: [stateName,stateUpdate] };
+  return { blockStatement: stateHook, returnProperty: [stateName, stateUpdate] };
 };
