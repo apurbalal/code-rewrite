@@ -1,63 +1,11 @@
-import { handleWithHandlers } from "./helpers/handleWithHandlers";
 import * as types from "@babel/types";
 import { parse } from "@babel/parser";
-import { handleWithState } from "./helpers/handleWithState";
 import traverse from "@babel/traverse";
 import { print } from "recast";
-import { handleWithProps } from "./helpers/handleWithProps";
-import { handleCustomEnhance } from "./helpers/handleCustomEnhance";
-import { handleWithGraphql } from "./helpers/handleWithGraphql";
-import { handleLifecycle } from "./helpers/handleLifecycle";
-import { handleRenameProps } from "./helpers/handleRenameProps";
-
-const convertComposeToHook = (path: any) => {
-  const blockStatements: (types.BlockStatement | types.VariableDeclaration | types.Statement)[] = [];
-  const returnProperties: string[] = [];
-
-  path.node.arguments.forEach((eachArgument: any) => {
-    if (eachArgument.type === "Identifier") {
-      if (eachArgument.name.slice(0, 4) === "with") {
-        const { blockStatement, returnProperty } = handleCustomEnhance(eachArgument.name.slice(4));
-        blockStatements.push(blockStatement);
-        returnProperties.push(returnProperty);
-      }
-    }
-    if (eachArgument.type === "CallExpression") {
-      if (eachArgument.callee.name === "withHandlers") {
-        eachArgument.arguments[0].properties.map(
-          (eachProperty: any) => {
-            const { blockStatement, returnProperty } = handleWithHandlers(eachProperty);
-            blockStatements.push(blockStatement);
-            returnProperties.push(returnProperty);
-          }
-        );
-      } else if (eachArgument.callee.name === "withState") {
-        const { blockStatement, returnProperty } = handleWithState(eachArgument);
-        blockStatements.push(blockStatement);
-        returnProperties.push(...returnProperty);
-      } else if (eachArgument.callee.name === "withGraphql") {
-        const { blockStatement, returnProperty } = handleWithGraphql(eachArgument);
-        blockStatements.push(blockStatement);
-        returnProperties.push(...returnProperty);
-      } else if (eachArgument.callee.name === "withProps" || eachArgument.callee.name === "mapProps") {
-        const { blockStatement, returnProperty } = handleWithProps(eachArgument);
-        blockStatements.push(blockStatement);
-        returnProperties.push(...returnProperty);
-      } else if (eachArgument.callee.name === "renameProps") {
-        const { blockStatement, returnProperty } = handleRenameProps(eachArgument);
-        blockStatements.push(blockStatement);
-        returnProperties.push(...returnProperty);
-      } else if (eachArgument.callee.name === "lifecycle") {
-        const { blockStatement } = handleLifecycle(eachArgument);
-        blockStatements.push(...blockStatement);
-      }
-    }
-  });
-
-  return { blockStatements, returnProperties };
-}
+import { convertComposeToHook } from "./convertComposeToHook";
 
 export const generateReWrittenCode = (code: string) => {
+
   const ast = parse(code, {
     sourceType: "module",
     plugins: ["jsx", "typescript"],
@@ -93,7 +41,6 @@ export const generateReWrittenCode = (code: string) => {
 
         const arrowFunction = types.arrowFunctionExpression(
           [],
-          // replace
           types.blockStatement([
             ...blockStatements,
             returnStatement,
