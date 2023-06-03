@@ -1,4 +1,5 @@
 import * as types from "@babel/types";
+import { getReturnPropertiesFromBody } from "./utils/getReturnPropertiesFromBody";
 
 export const handleWithProps = (eachArgument: any) => {
   if (eachArgument.arguments[0].type === "ArrowFunctionExpression") {
@@ -13,14 +14,23 @@ export const handleWithProps = (eachArgument: any) => {
       ]
     );
 
+    const returnProperties = getReturnPropertiesFromBody(eachArgument.arguments[0].body);
+
     const blockStatement = types.variableDeclaration("const", [
       types.variableDeclarator(
-        types.identifier("properties"),
+        types.objectPattern(
+          returnProperties.map((eachName) => {
+            return types.objectProperty(
+              types.identifier(eachName),
+              types.identifier(eachName)
+            );
+          })
+        ),
         createCallback
       ),
     ]);
 
-    return { blockStatement, returnProperty: ["properties"] };
+    return { blockStatement, returnProperty: returnProperties, dependency: eachArgument.arguments[0].params.properties };
   } else {
     const createCallback = types.callExpression(
       types.identifier("useMemo"),
