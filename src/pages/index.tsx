@@ -16,6 +16,7 @@ function HomePage() {
       console.clear();
       const { code: resultCode, prevAST } =
         generateReWrittenCode(debouncedValue);
+
       setResult(resultCode ?? "");
       setAst(prevAST);
     } catch (error) {
